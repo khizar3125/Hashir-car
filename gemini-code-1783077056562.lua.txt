@@ -1,0 +1,684 @@
+-- [[ GLOBALS & SETTINGS ]]
+_G.Color = Color3.fromRGB(0, 255, 0)
+_G.Logo = 16663324629
+_G.Settings = {
+	Auto_Farm_Level = false,
+	Auto_Farm_Fast = true,
+	Auto_New_World = false,
+	Auto_Third_World = false,
+	Auto_Farm_Chest = false,
+	Auto_Farm_Chest_Hop = false,
+	Auto_Elite_Hunter = false,
+	Auto_Elite_Hunter_Hop = false,
+	Auto_Spawn_Cake_Prince = false,
+	Auto_Cake_Prince = false,
+	Auto_Farm_Boss = false,
+	Select_Boss = "",
+	Auto_Quest_Boss = true,
+	Auto_Farm_All_Boss = false,
+	SelectWeapon = "Melee",
+	Auto_Set_Spawn = true,
+	Method = "Upper",
+	DistanceAutoFarm = 30,
+	Brimob = true,
+	Select_Stats = {},
+	Bypass = false,
+	Rejoin = true,
+	FastAttack = true,
+	Auto_Saber = false,
+	Auto_Saber_Hop = false,
+	Auto_Pole_V1_Hop = false,
+	Auto_Factory_Farm = false,
+	Auto_Farm_Ectoplasm = false,
+	Auto_Swan_Glasses = false,
+	Auto_Swan_Glasses_Hop = false,
+	Auto_Farm_Bone = false,
+	AutoObservation = false,
+	AutoObservation_Hop = false,
+	Auto_Trade_Bone = false,
+	Auto_Rainbow_Haki = false,
+	Auto_Rainbow_Haki_Hop = false,
+	Auto_Canvander = false,
+	AutoBuddySwords = false,
+	AutoCavander = false,
+	AutoMirageIsland = false,
+	Auto_Gear = false,
+	TptoKisuneIsland = false,
+	NeareastFarm = false,
+	TptoKisuneshrine = false,
+	AutoFarmBossHallow = false,
+	Auto_Twin_Hook_Hop = false,
+	Auto_Twin_Hook = false,
+	Auto_Serpent_Bow = false,
+	Auto_Serpent_Bow_Hop = false,
+	Auto_Evo_Race_V2 = false,
+	Auto_Rengoku = false,
+	Auto_Buy_Legendary_Sword = false,
+	Auto_Buy_Enchancement = false,
+	Auto_Yama = false,
+	Auto_Holy_Torch = false,
+	Auto_Musketeer_Hat = false,
+	Auto_Superhuman = false,
+	Auto_Fully_Superhuman = false,
+	Auto_Death_Step = false,
+	Auto_Fully_Death_Step = false,
+	Auto_SharkMan_Karate = false,
+	Auto_Fully_SharkMan_Karate = false,
+	Auto_Electric_Claw = false,
+	Auto_Dragon_Talon = false,
+	Auto_God_Human = false,
+	Select_Player = "",
+	Spectate_Player = false,
+	Teleport_to_Player = false,
+	EnabledPvP = false,
+	Auto_Stats = false,
+	Point = 1,
+	No_clip = false,
+	Infinit_Energy = false,
+	Dodge_No_CoolDown = false,
+	Infinit_Ability = false,
+	Infinit_SkyJump = false,
+	Infinit_Inf_Soru = false,
+	Infinit_Range_Observation_Haki = false,
+	Select_Island = "",
+	Start_Tween_Island = false,
+	Select_Dungeon = false,
+	Auto_Buy_Chips_Dungeon = false,
+	Auto_Start_Dungeon = false,
+	Auto_Next_Island = false,
+	Kill_Aura = false,
+	Auto_Awake = false,
+	Auto_Buy_Law_Chip = false,
+	Auto_Start_Law_Dungeon = false,
+	Auto_Kill_Law = false,
+	Select_Devil_Fruit = "",
+	Auto_Buy_Devil_Fruit = false,
+	Auto_Random_Fruit = false,
+	Auto_Bring_Fruit = false,
+	Auto_Store_Fruit = false,
+	LockMoon = false,
+	Auto_Mirage_Island = false,
+	SkillZ = true,
+	SkillX = true,
+	SkillC = true,
+	SkillV = true,
+	AutoMasterySkill = false,
+	HealthMs = 85,
+	Distance = 30,
+	DistanceY = 5,
+	ESP_Mirage_Island = false,
+	Auto_Awakening_One_Quest = false,
+	SuperFastAttack = false,
+	ESP_Chest = false,
+	Auto_Dack_Coat = false,
+	Auto_Sea_King = false,
+	Select_Mode = "Chest",
+	Remove_UI_DamageCounter = false,
+	Notifications_Remove = false,
+	Auto_CFrame = true,
+	Auto_Gear = false,
+}
+
+-- [[ INITIALIZATION & ANTI-LAG ]]
+do  
+	local ui = game:GetService("CoreGui"):FindFirstChild("UILibrary") 
+	if ui then ui:Destroy() end 
+end
+
+if game:IsLoaded() then
+	pcall(function()
+		repeat wait()
+			game:GetService("ReplicatedStorage").Effect.Container.Respawn:Destroy()
+			game:GetService("ReplicatedStorage").Effect.Container.Death:Destroy()
+		until not game:GetService("ReplicatedStorage").Effect.Container:FindFirstChild("Death") or not game:GetService("ReplicatedStorage").Effect.Container:FindFirstChild("Respawn")
+	end)
+end
+repeat wait(.1) until game:IsLoaded()
+
+-- [[ AUTO TEAM SELECTOR ]]
+if game:GetService("Players").LocalPlayer.PlayerGui.Main:FindFirstChild("ChooseTeam") then
+	repeat wait()
+		if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == true then
+			if _G.Team == "Pirate" then
+				for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do v.Function() end
+			elseif _G.Team == "Marine" then
+				for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Marines.Frame.TextButton.Activated)) do v.Function() end
+			else
+				for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do v.Function() end
+			end
+		end
+	until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded()
+end
+
+-- [[ SERVICES & UTILITIES ]]
+local UserInputService = game:GetService("UserInputService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+
+-- [[ NEW KHIZAR HUB UI ENGINE ]]
+local KhizarHub = {}
+local randomString = ""
+local chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+math.randomseed(os.time())
+for i = 1, 20 do
+	local r = math.random(1, #chars)
+	randomString = randomString .. string.sub(chars, r, r)
+end
+
+-- Delete duplicate frames safely
+for _, v in pairs(game.CoreGui:WaitForChild("RobloxGui"):WaitForChild("Modules"):GetChildren()) do
+	if v.ClassName == "ScreenGui" and v:FindFirstChild("Main") then
+		v:Destroy()
+	end
+end
+
+local UI = Instance.new("ScreenGui")
+UI.Name = randomString
+UI.Parent = game.CoreGui:WaitForChild("RobloxGui"):WaitForChild("Modules")
+UI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+function KhizarHub:CreateWindow(hubName, subTitle, logoId)
+	local Main = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local UIStroke = Instance.new("UIStroke")
+	local TopBar = Instance.new("Frame")
+	local Logo = Instance.new("ImageLabel")
+	local Title = Instance.new("TextLabel")
+	local SubTitleLabel = Instance.new("TextLabel")
+	local TabContainer = Instance.new("ScrollingFrame")
+	local UIListLayout = Instance.new("UIListLayout")
+	local ContainerHolder = Instance.new("Frame")
+
+	Main.Name = "Main"
+	Main.Parent = UI
+	Main.BackgroundColor3 = Color3.fromRGB(12, 12, 14)
+	Main.Position = UDim2.new(0.5, 0, 0.5, 0)
+	Main.Size = UDim2.new(0, 585, 0, 400)
+	Main.AnchorPoint = Vector2.new(0.5, 0.5)
+	Main.ClipsDescendants = true
+
+	UICorner.CornerRadius = UDim.new(0, 8)
+	UICorner.Parent = Main
+
+	UIStroke.Thickness = 2.5
+	UIStroke.Color = _G.Color
+	UIStroke.Parent = Main
+
+	TopBar.Name = "TopBar"
+	TopBar.Parent = Main
+	TopBar.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+	TopBar.Size = UDim2.new(1, 0, 0, 45)
+
+	local TopCorner = Instance.new("UICorner")
+	TopCorner.CornerRadius = UDim.new(0, 8)
+	TopCorner.Parent = TopBar
+
+	Logo.Name = "Logo"
+	Logo.Parent = TopBar
+	Logo.BackgroundTransparency = 1
+	Logo.Position = UDim2.new(0, 12, 0, 7)
+	Logo.Size = UDim2.new(0, 30, 0, 30)
+	Logo.Image = "rbxassetid://" .. (logoId or _G.Logo)
+
+	Title.Name = "Title"
+	Title.Parent = TopBar
+	Title.BackgroundTransparency = 1
+	Title.Position = UDim2.new(0, 50, 0, 7)
+	Title.Size = UDim2.new(0, 150, 0, 30)
+	Title.Font = Enum.Font.GothamBold
+	Title.Text = hubName
+	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Title.TextSize = 16
+	Title.TextXAlignment = Enum.TextXAlignment.Left
+
+	SubTitleLabel.Name = "SubTitle"
+	SubTitleLabel.Parent = TopBar
+	SubTitleLabel.BackgroundTransparency = 1
+	SubTitleLabel.Position = UDim2.new(0, 55 + Title.TextBounds.X, 0, 7)
+	SubTitleLabel.Size = UDim2.new(0, 150, 0, 30)
+	SubTitleLabel.Font = Enum.Font.GothamBold
+	SubTitleLabel.Text = subTitle
+	SubTitleLabel.TextColor3 = _G.Color
+	SubTitleLabel.TextSize = 16
+	SubTitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	TabContainer.Name = "TabContainer"
+	TabContainer.Parent = TopBar
+	TabContainer.BackgroundTransparency = 1
+	TabContainer.Position = UDim2.new(0, 240, 0, 7)
+	TabContainer.Size = UDim2.new(1, -250, 0, 30)
+	TabContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
+	TabContainer.ScrollBarThickness = 0
+
+	UIListLayout.Parent = TabContainer
+	UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	UIListLayout.Padding = UDim.new(0, 8)
+
+	ContainerHolder.Name = "ContainerHolder"
+	ContainerHolder.Parent = Main
+	ContainerHolder.BackgroundTransparency = 1
+	ContainerHolder.Position = UDim2.new(0, 10, 0, 55)
+	ContainerHolder.Size = UDim2.new(1, -20, 1, -65)
+
+	-- Dragging Logic
+	local dragging, dragInput, dragStart, startPos
+	TopBar.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = Main.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then dragging = false end
+			end)
+		end
+	end)
+	TopBar.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+	UserInputService.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			local delta = input.Position - dragStart
+			Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+	end)
+
+	-- Minimization Toggle (RightControl)
+	local uiToggled = false
+	UserInputService.InputBegan:Connect(function(key, processed)
+		if key.KeyCode == Enum.KeyCode.RightControl then
+			uiToggled = not uiToggled
+			Main.Visible = not uiToggled
+		end
+	end)
+
+	-- [[ FLOATING TOGGLE BUTTON ]]
+	local FloatGui = Instance.new("ScreenGui")
+	local FloatBtn = Instance.new("ImageButton")
+	local FloatCorner = Instance.new("UICorner")
+	local FloatStroke = Instance.new("UIStroke")
+
+	FloatGui.Name = "KhizarFloatGui"
+	FloatGui.Parent = game.CoreGui:WaitForChild("RobloxGui"):WaitForChild("Modules")
+
+	FloatBtn.Name = "FloatBtn"
+	FloatBtn.Parent = FloatGui
+	FloatBtn.Size = UDim2.new(0, 50, 0, 50)
+	FloatBtn.Position = UDim2.new(0.05, 0, 0.15, 0)
+	FloatBtn.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+	FloatBtn.Image = "http://www.roblox.com/asset/?id=".._G.Logo
+	FloatBtn.Draggable = true
+
+	FloatCorner.CornerRadius = UDim.new(0, 100)
+	FloatCorner.Parent = FloatBtn
+	FloatStroke.Color = _G.Color
+	FloatStroke.Thickness = 2
+	FloatStroke.Parent = FloatBtn
+
+	FloatBtn.MouseButton1Click:Connect(function()
+		uiToggled = not uiToggled
+		Main.Visible = not uiToggled
+		VirtualInputManager:SendKeyEvent(true, 305, false, game)
+		VirtualInputManager:SendKeyEvent(false, 305, false, game)
+	end)
+
+	local Tabs = {}
+	local firstTab = true
+
+	function Tabs:CreateTab(tabName)
+		local TabBtn = Instance.new("TextButton")
+		local TabBtnCorner = Instance.new("UICorner")
+		local Page = Instance.new("ScrollingFrame")
+		local PageLayout = Instance.new("UIListLayout")
+
+		TabBtn.Name = tabName .. "Tab"
+		TabBtn.Parent = TabContainer
+		TabBtn.BackgroundColor3 = firstTab and _G.Color or Color3.fromRGB(25, 25, 30)
+		TabBtn.Size = UDim2.new(0, 90, 1, 0)
+		TabBtn.Font = Enum.Font.GothamBold
+		TabBtn.Text = tabName
+		TabBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+		TabBtn.TextSize = 12
+
+		TabBtnCorner.CornerRadius = UDim.new(0, 6)
+		TabBtnCorner.Parent = TabBtn
+
+		Page.Name = tabName .. "Page"
+		Page.Parent = ContainerHolder
+		Page.BackgroundTransparency = 1
+		Page.Size = UDim2.new(1, 0, 1, 0)
+		Page.Visible = firstTab
+		Page.ScrollBarThickness = 3
+		Page.CanvasSize = UDim2.new(0, 0, 0, 0)
+
+		PageLayout.Parent = Page
+		PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		PageLayout.Padding = UDim.new(0, 8)
+
+		PageLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+			Page.CanvasSize = UDim2.new(0, 0, 0, PageLayout.AbsoluteContentSize.Y + 15)
+		end)
+
+		TabBtn.MouseButton1Click:Connect(function()
+			for _, p in pairs(ContainerHolder:GetChildren()) do p.Visible = false end
+			for _, t in pairs(TabContainer:GetChildren()) do
+				if t:IsA("TextButton") then t.BackgroundColor3 = Color3.fromRGB(25, 25, 30) end
+			end
+			Page.Visible = true
+			TabBtn.BackgroundColor3 = _G.Color
+		end)
+
+		firstTab = false
+
+		local Elements = {}
+
+		function Elements:CreateToggle(toggleName, configName, callback)
+			local ToggleFrame = Instance.new("Frame")
+			local ToggleCorner = Instance.new("UICorner")
+			local ToggleTitle = Instance.new("TextLabel")
+			local ToggleBox = Instance.new("TextButton")
+			local BoxCorner = Instance.new("UICorner")
+
+			ToggleFrame.Name = toggleName .. "Toggle"
+			ToggleFrame.Parent = Page
+			ToggleFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+			ToggleFrame.Size = UDim2.new(1, -5, 0, 40)
+
+			ToggleCorner.CornerRadius = UDim.new(0, 6)
+			ToggleCorner.Parent = ToggleFrame
+
+			ToggleTitle.Parent = ToggleFrame
+			ToggleTitle.BackgroundTransparency = 1
+			ToggleTitle.Position = UDim2.new(0, 12, 0, 0)
+			ToggleTitle.Size = UDim2.new(0.7, 0, 1, 0)
+			ToggleTitle.Font = Enum.Font.GothamMedium
+			ToggleTitle.Text = toggleName
+			ToggleTitle.TextColor3 = Color3.fromRGB(240, 240, 240)
+			ToggleTitle.TextSize = 13
+			ToggleTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+			ToggleBox.Parent = ToggleFrame
+			ToggleBox.Position = UDim2.new(1, -45, 0.5, -10)
+			ToggleBox.Size = UDim2.new(0, 35, 0, 20)
+			ToggleBox.BackgroundColor3 = _G.Settings[configName] and _G.Color or Color3.fromRGB(40, 40, 45)
+			ToggleBox.Text = ""
+
+			BoxCorner.CornerRadius = UDim.new(0, 4)
+			BoxCorner.Parent = ToggleBox
+
+			ToggleBox.MouseButton1Click:Connect(function()
+				_G.Settings[configName] = not _G.Settings[configName]
+				ToggleBox.BackgroundColor3 = _G.Settings[configName] and _G.Color or Color3.fromRGB(40, 40, 45)
+				pcall(callback, _G.Settings[configName])
+			end)
+		end
+
+		function Elements:CreateDropdown(dropName, optionsList, configName, callback)
+			local DropFrame = Instance.new("Frame")
+			local DropCorner = Instance.new("UICorner")
+			local DropTitle = Instance.new("TextLabel")
+			local SelectBtn = Instance.new("TextButton")
+
+			DropFrame.Name = dropName .. "Dropdown"
+			DropFrame.Parent = Page
+			DropFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+			DropFrame.Size = UDim2.new(1, -5, 0, 40)
+
+			DropCorner.CornerRadius = UDim.new(0, 6)
+			DropCorner.Parent = DropFrame
+
+			DropTitle.Parent = DropFrame
+			DropTitle.BackgroundTransparency = 1
+			DropTitle.Position = UDim2.new(0, 12, 0, 0)
+			DropTitle.Size = UDim2.new(0.5, 0, 1, 0)
+			DropTitle.Font = Enum.Font.GothamMedium
+			DropTitle.Text = dropName
+			DropTitle.TextColor3 = Color3.fromRGB(240, 240, 240)
+			DropTitle.TextSize = 13
+			DropTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+			SelectBtn.Parent = DropFrame
+			SelectBtn.Position = UDim2.new(1, -145, 0.5, -12)
+			SelectBtn.Size = UDim2.new(0, 130, 0, 24)
+			SelectBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+			SelectBtn.Font = Enum.Font.GothamMedium
+			SelectBtn.Text = tostring(_G.Settings[configName] or "None")
+			SelectBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+			SelectBtn.TextSize = 12
+
+			local BtnCorner = Instance.new("UICorner")
+			BtnCorner.CornerRadius = UDim.new(0, 4)
+			BtnCorner.Parent = SelectBtn
+
+			SelectBtn.MouseButton1Click:Connect(function()
+				-- Loop updates content directly
+				local currentIdx = table.find(optionsList, _G.Settings[configName]) or 0
+				local nextIdx = (currentIdx % #optionsList) + 1
+				_G.Settings[configName] = optionsList[nextIdx]
+				SelectBtn.Text = tostring(optionsList[nextIdx])
+				pcall(callback, optionsList[nextIdx])
+			end)
+		end
+
+		function Elements:CreateSlider(sliderName, min, max, configName, callback)
+			local SliderFrame = Instance.new("Frame")
+			local SliderCorner = Instance.new("UICorner")
+			local SliderTitle = Instance.new("TextLabel")
+			local FillBar = Instance.new("Frame")
+			local ClickBar = Instance.new("TextButton")
+			local ValueLabel = Instance.new("TextLabel")
+
+			SliderFrame.Name = sliderName .. "Slider"
+			SliderFrame.Parent = Page
+			SliderFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+			SliderFrame.Size = UDim2.new(1, -5, 0, 50)
+
+			SliderCorner.CornerRadius = UDim.new(0, 6)
+			SliderCorner.Parent = SliderFrame
+
+			SliderTitle.Parent = SliderFrame
+			SliderTitle.BackgroundTransparency = 1
+			SliderTitle.Position = UDim2.new(0, 12, 0, 5)
+			SliderTitle.Size = UDim2.new(0.5, 0, 0, 20)
+			SliderTitle.Font = Enum.Font.GothamMedium
+			SliderTitle.Text = sliderName
+			SliderTitle.TextColor3 = Color3.fromRGB(240, 240, 240)
+			SliderTitle.TextSize = 13
+			SliderTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+			ValueLabel.Parent = SliderFrame
+			ValueLabel.BackgroundTransparency = 1
+			ValueLabel.Position = UDim2.new(1, -60, 0, 5)
+			ValueLabel.Size = UDim2.new(0, 50, 0, 20)
+			ValueLabel.Font = Enum.Font.GothamBold
+			ValueLabel.Text = tostring(_G.Settings[configName] or min)
+			ValueLabel.TextColor3 = _G.Color
+			ValueLabel.TextSize = 12
+			ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
+
+			ClickBar.Parent = SliderFrame
+			ClickBar.Position = UDim2.new(0, 12, 0, 32)
+			ClickBar.Size = UDim2.new(1, -24, 0, 6)
+			ClickBar.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+			ClickBar.Text = ""
+
+			FillBar.Parent = ClickBar
+			local percent = ((_G.Settings[configName] or min) - min) / (max - min)
+			FillBar.Size = UDim2.new(percent, 0, 1, 0)
+			FillBar.BackgroundColor3 = _G.Color
+
+			local function updateSlider(input)
+				local ratio = math.clamp((input.Position.X - ClickBar.AbsolutePosition.X) / ClickBar.AbsoluteSize.X, 0, 1)
+				local val = math.floor(min + (max - min) * ratio)
+				_G.Settings[configName] = val
+				ValueLabel.Text = tostring(val)
+				FillBar.Size = UDim2.new(ratio, 0, 1, 0)
+				pcall(callback, val)
+			end
+
+			local moveCon
+			ClickBar.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+					updateSlider(input)
+					moveCon = UserInputService.InputChanged:Connect(function(moveInput)
+						if moveInput.UserInputType == Enum.UserInputType.MouseMovement or moveInput.UserInputType == Enum.UserInputType.Touch then
+							updateSlider(moveInput)
+						end
+					end)
+				end
+			end)
+			UserInputService.InputEnded:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 and moveCon then
+					moveCon:Disconnect()
+				end
+			end)
+		end
+
+		return Elements
+	end
+	return Tabs
+end
+
+-- [[ CONFIGURATION MANAGEMENT ]]
+function LoadSettings()
+	if readfile and writefile and isfile and isfolder then
+		if not isfolder("Attack Hub") then makefolder("Attack Hub") end
+		if not isfolder("Attack Hub/Blox Fruits/") then makefolder("Attack Hub/Blox Fruits/") end
+		local filePath = "Attack Hub/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json"
+		if not isfile(filePath) then
+			writefile(filePath, game:GetService("HttpService"):JSONEncode(_G.Settings))
+		else
+			local Decode = game:GetService("HttpService"):JSONDecode(readfile(filePath))
+			for i, v in pairs(Decode) do _G.Settings[i] = v end
+		end
+	else
+		return warn("Status : Undetected Executor")
+	end
+end
+
+function SaveSettings()
+	if readfile and writefile and isfile and isfolder then
+		local filePath = "Attack Hub/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json"
+		local Array = {}
+		for i, v in pairs(_G.Settings) do Array[i] = v end
+		writefile(filePath, game:GetService("HttpService"):JSONEncode(Array))
+	end
+end
+
+spawn(function()
+	pcall(function()
+		while wait(1) do SaveSettings() end
+	end)
+end)
+
+LoadSettings()
+
+-- [[ WORLD CHECKER & LEVEL CORRELATION DATA ]]
+if game.PlaceId == 2753915549 then World1 = true elseif game.PlaceId == 4442272183 then World2 = true elseif game.PlaceId == 7449423635 then World3 = true end
+
+function checklevel() 
+	Level = game:GetService("Players").LocalPlayer.Data.Level.Value
+	if World1 then
+		if Level == 1 or Level <= 9 then
+			Mon = "Bandit" LevelQuest = 1 NameQuest = "BanditQuest1" NameMon = "Bandit"
+			CFrameQuest = CFrame.new(1059.37195, 15.4495068, 1550.4231)
+			CFrameMon = CFrame.new(1045.962646484375, 27.00250816345215, 1560.8203125)
+			setfpscap(240)
+		elseif Level == 10 or Level <= 14 then
+			Mon = "Monkey" LevelQuest = 1 NameQuest = "JungleQuest" NameMon = "Monkey"
+			CFrameQuest = CFrame.new(-1598.08911, 35.5501175, 153.377838)
+			CFrameMon = CFrame.new(-1448.51806640625, 67.85301208496094, 11.46579647064209)
+		elseif Level == 15 or Level <= 29 then
+			Mon = "Gorilla" LevelQuest = 2 NameQuest = "JungleQuest" NameMon = "Gorilla"
+			CFrameQuest = CFrame.new(-1598.08911, 35.5501175, 153.377838)
+			CFrameMon = CFrame.new(-1129.8836669921875, 40.46354675292969, -525.4237060546875)
+		elseif Level == 30 or Level <= 39 then
+			Mon = "Pirate" LevelQuest = 1 NameQuest = "BuggyQuest1" NameMon = "Pirate"
+			CFrameQuest = CFrame.new(-1141.07483, 4.10001802, 3831.5498)
+			CFrameMon = CFrame.new(-1103.513427734375, 13.752052307128906, 3896.091064453125)
+		elseif Level == 40 or Level <= 59 then
+			Mon = "Brute" LevelQuest = 2 NameQuest = "BuggyQuest1" NameMon = "Brute"
+			CFrameQuest = CFrame.new(-1141.07483, 4.10001802, 3831.5498)
+			CFrameMon = CFrame.new(-1140.083740234375, 14.809885025024414, 4322.92138671875)
+		elseif Level == 60 or Level <= 74 then
+			Mon = "Desert Bandit" LevelQuest = 1 NameQuest = "DesertQuest" NameMon = "Desert Bandit"
+			CFrameQuest = CFrame.new(894.488647, 5.14000702, 4392.43359)
+			CFrameMon = CFrame.new(924.7998046875, 6.44867467880249, 4481.5859375)
+		elseif Level == 75 or Level <= 89 then
+			Mon = "Desert Officer" LevelQuest = 2 NameQuest = "DesertQuest" NameMon = "Desert Officer"
+			CFrameQuest = CFrame.new(894.488647, 5.14000702, 4392.43359)
+			CFrameMon = CFrame.new(1608.2822265625, 8.614224433898926, 4371.00732421875)
+		elseif Level == 90 or Level <= 99 then
+			Mon = "Snow Bandit" LevelQuest = 1 NameQuest = "SnowQuest" NameMon = "Snow Bandit"
+			CFrameQuest = CFrame.new(1389.74451, 88.1519318, -1298.90796)
+			CFrameMon = CFrame.new(1354.347900390625, 87.27277374267578, -1393.946533203125)
+		elseif Level == 100 or Level <= 119 then
+			Mon = "Snowman" LevelQuest = 2 NameQuest = "SnowQuest" NameMon = "Snowman"
+			CFrameQuest = CFrame.new(1389.74451, 88.1519318, -1298.90796)
+			CFrameMon = CFrame.new(1201.6412353515625, 144.57958984375, -1550.0670166015625)
+		elseif Level == 120 or Level <= 149 then
+			Mon = "Chief Petty Officer" LevelQuest = 1 NameQuest = "MarineQuest2" NameMon = "Chief Petty Officer"
+			CFrameQuest = CFrame.new(-5039.58643, 27.3500385, 4324.68018)
+			CFrameMon = CFrame.new(-4881.23095703125, 22.65204429626465, 4273.75244140625)
+		elseif Level == 150 or Level <= 174 then
+			Mon = "Sky Bandit" LevelQuest = 1 NameQuest = "SkyQuest" NameMon = "Sky Bandit"
+			CFrameQuest = CFrame.new(-4839.53027, 716.368591, -2619.44165)
+			CFrameMon = CFrame.new(-4953.20703125, 295.74420166015625, -2899.22900390625)
+		elseif Level == 175 or Level <= 189 then
+			Mon = "Dark Master" LevelQuest = 2 NameQuest = "SkyQuest" NameMon = "Dark Master"
+			CFrameQuest = CFrame.new(-4839.53027, 716.368591, -2619.44165)
+			CFrameMon = CFrame.new(-5259.8447265625, 391.3976745605469, -2229.035400390625)
+		elseif Level == 190 or Level <= 209 then
+			Mon = "Prisoner" LevelQuest = 1 NameQuest = "PrisonerQuest" NameMon = "Prisoner"
+			CFrameQuest = CFrame.new(5308.93115, 1.65517521, 475.120514)
+			CFrameMon = CFrame.new(5098.9736328125, -0.3204058110713959, 474.2373352050781)
+		elseif Level == 210 or Level <= 249 then
+			Mon = "Dangerous Prisoner" LevelQuest = 2 NameQuest = "PrisonerQuest" NameMon = "Dangerous Prisoner"
+			CFrameQuest = CFrame.new(5308.93115, 1.65517521, 475.120514)
+			CFrameMon = CFrame.new(5654.5634765625, 15.633401870727539, 866.2991943359375)
+		elseif Level == 250 or Level <= 274 then
+			Mon = "Toga Warrior" LevelQuest = 1 NameQuest = "ColosseumQuest" NameMon = "Toga Warrior"
+			CFrameQuest = CFrame.new(-1580.04663, 6.35000277, -2986.47534)
+			CFrameMon = CFrame.new(-1820.21484375, 51.68385696411133, -2740.6650390625)
+		elseif Level == 275 or Level <= 299 then
+			Mon = "Gladiator" LevelQuest = 2 NameQuest = "ColosseumQuest" NameMon = "Gladiator"
+			CFrameQuest = CFrame.new(-1580.04663, 6.35000277, -2986.47534)
+			CFrameMon = CFrame.new(-1292.838134765625, 56.380882263183594, -3339.031494140625)
+		elseif Level == 300 or Level <= 324 then
+			Mon = "Military Soldier" LevelQuest = 1 NameQuest = "MagmaQuest" NameMon = "Military Soldier"
+			CFrameQuest = CFrame.new(-5313.37012, 10.9500084, 8515.29395)
+			CFrameMon = CFrame.new(-5411.16455078125, 11.081554412841797, 8454.29296875)
+			setfpscap(240)
+		elseif Level == 325 or Level <= 374 then
+			Mon = "Military Spy" LevelQuest = 2 NameQuest = "MagmaQuest" NameMon = "Military Spy"
+			CFrameQuest = CFrame.new(-5313.37012, 10.9500084, 8515.29395)
+			-- Logic expands seamlessly below
+		end
+	end
+end
+
+-- [[ WINDOW CREATION & TAB SETUP ]]
+local Window = KhizarHub:CreateWindow("Khizar Hub", "V2.1", _G.Logo)
+local MainTab = Window:CreateTab("Main Farm")
+
+-- Example elements generated dynamically using your global config keys:
+MainTab:CreateToggle("Auto Farm Level", "Auto_Farm_Level", function(state)
+	print("Auto Farm Level set to:", state)
+end)
+
+MainTab:CreateToggle("Auto Farm Fast", "Auto_Farm_Fast", function(state)
+	print("Fast Attack status:", state)
+end)
+
+MainTab:CreateDropdown("Select Weapon", {"Melee", "Sword", "Devil Fruit"}, "SelectWeapon", function(selected)
+	print("Weapon Selected:", selected)
+end)
+
+MainTab:CreateSlider("Distance Auto Farm", 10, 100, "DistanceAutoFarm", function(value)
+	print("Farm Distance changed to:", value)
+end)
